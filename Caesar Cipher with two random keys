@@ -1,0 +1,81 @@
+import java.util.*;
+import java.lang.*;
+import java.io.*;
+public class CaesarCipher
+{
+	private String alphabets="ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+	private String reverseStr1;
+	private String reverseStr2;
+
+	public String decrypte2Key(String encrypted,int key1, int key2){
+		encrypted=encrypted.toUpperCase();
+		String halfString0=halfOfString(encrypted,0);
+	    String halfString1=halfOfString(encrypted,1);
+	    String decrypted1=decrypt(halfString0,key1);
+	    String decrypted2=decrypt(halfString1,key2);
+	    
+	    return fullString(encrypted,decrypted1,decrypted2);
+	}
+	
+	private String fullString(String encrypted,String encrypted1,String encrypted2){
+			StringBuilder decrypted = new StringBuilder(encrypted);
+			for(int i=0;i<encrypted1.length();i++){
+				if(i==0)
+				  decrypted.setCharAt(i, encrypted1.charAt(i));
+				else
+				  decrypted.setCharAt(i+i, encrypted1.charAt(i));
+				}
+				
+			for(int i=0;i<encrypted2.length();i++){
+				if(i==0)
+				  decrypted.setCharAt(i+1, encrypted2.charAt(i));
+				else
+				  decrypted.setCharAt(i+i+1, encrypted2.charAt(i));
+				}
+			
+		return 	decrypted.toString();	
+	}
+	
+	private String decrypt(String encrypted,int key){
+		StringBuilder decrypted = new StringBuilder(encrypted);
+		String reverseStr=alphabets.substring(26-key)+alphabets.substring(0,26-key);
+		for(int i=0;i<encrypted.length();i++){
+			char currChar = encrypted.charAt(i);
+			int idx = alphabets.indexOf(currChar);
+			if(idx != -1){
+                //Get the idxth character of shiftedAlphabet (newChar)
+                char newChar = reverseStr.charAt(idx);
+                //Replace the ith character of encrypted with newChar
+                decrypted.setCharAt(i, newChar);
+            }
+          
+		}
+        
+		return decrypted.toString();
+	}
+	private String halfOfString(String s1, int start){
+		String halfString="";
+		for(int i=start;i<s1.length();i=i+2){
+			halfString=halfString+s1.charAt(i);
+		}
+		return halfString;
+	}
+	public static void main (String[] args) 
+	{
+		try
+		{
+				String encrypted="Uybi Gfqgykii";
+         	CaesarCipher cs=new CaesarCipher();
+         	for(int i=1;i<=26;i++){
+         	   for(int j=i+1;j<=26;j++) 
+         	{
+		    String decrypt=cs.decrypte2Key(encrypted,i,j);
+		    System.out.println("i,j="+i+j);
+		    System.out.println(decrypt);
+         	}}
+		}catch(Exception ex){
+			ex.printStackTrace();
+		}
+	
+	}
+}
